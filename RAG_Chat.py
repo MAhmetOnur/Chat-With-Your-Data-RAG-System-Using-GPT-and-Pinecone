@@ -3,9 +3,9 @@ import openai
 import pinecone
 from dotenv import load_dotenv
 
-from langchain.vectorstores import Pinecone
-from langchain.chat_models import ChatOpenAI
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_openai import ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import Pinecone
 from langchain.chains.question_answering import load_qa_chain
 
 load_dotenv()
@@ -35,3 +35,4 @@ def answer_question_rag(index_name):
 
 initialize_system()
 answer_question_rag("rag-system")
+

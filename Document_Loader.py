@@ -5,22 +5,22 @@ import logging
 import pinecone
 from dotenv import load_dotenv
 
-from langchain.vectorstores import Pinecone
+from langchain_community.vectorstores import Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-from langchain.document_loaders import (CSVLoader,
-                                        PyPDFLoader,
-                                        UnstructuredURLLoader,
-                                        UnstructuredExcelLoader,
-                                        UnstructuredPowerPointLoader,
-                                        UnstructuredWordDocumentLoader)
+from langchain_community.document_loaders import (CSVLoader,
+                                                PyPDFLoader,
+                                                UnstructuredURLLoader,
+                                                UnstructuredExcelLoader,
+                                                UnstructuredPowerPointLoader,
+                                                UnstructuredWordDocumentLoader)
+
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 PINECONE_API_ENV = os.getenv("PINECONE_API_ENV")
-
 
 ######################################## LOADING DOCUMENT ##############################################################
 
@@ -78,27 +78,18 @@ def process_and_index_documents(file_path_or_url,
     :param chunk_overlap: Overlap size between chunks. Default is 0.
     :return: None
     """
-
-    # Load the document
     data = load_document(file_path_or_url)
-
-    # Split the document into chunks
     text_splitter = RecursiveCharacterTextSplitter(chunk_size = chunk_size,
                                                    chunk_overlap = chunk_overlap)
-
     texts = text_splitter.split_documents(data)
-
     pinecone.init(api_key = pinecone_api_key,
                   environment = pinecone_env)
-
     embeddings = OpenAIEmbeddings()
-
     Pinecone.from_texts([t.page_content for t in texts], embeddings, index_name = index_name)
-
     print("Documents processed and indexed successfully.")
 
 
-process_and_index_documents("",
+process_and_index_documents("/Users/mao/Desktop/MAO/M.Ahmet Onur CV ENG.pdf",
                             PINECONE_API_KEY,
                             PINECONE_API_ENV,
                             "rag-system")
